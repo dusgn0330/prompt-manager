@@ -171,6 +171,39 @@ def show_detail():
     print(line)
 
 
+def toggle_favorite():
+    print("\n=== 즐겨찾기 관리 ===")
+    if not prompts:
+        print("등록된 프롬프트가 없습니다.")
+        return
+
+    choice = input("프롬프트 번호 입력: ").strip()
+    if not (choice.isdigit() and 1 <= int(choice) <= len(prompts)):
+        print(f"잘못된 번호입니다. 1~{len(prompts)} 사이의 번호를 입력해주세요.")
+        return
+
+    p = prompts[int(choice) - 1]
+    p["favorite"] = not p["favorite"]
+
+    if p["favorite"]:
+        print(f"'{p['title']}' 프롬프트를 즐겨찾기에 추가했습니다!")
+    else:
+        print(f"'{p['title']}' 프롬프트를 즐겨찾기에서 해제했습니다.")
+
+
+def show_favorites():
+    print("\n=== 즐겨찾기 목록 ===")
+    favorites = [p for p in prompts if p["favorite"]]
+
+    if not favorites:
+        print("즐겨찾기한 프롬프트가 없습니다.")
+        return
+
+    for i, p in enumerate(favorites, start=1):
+        print(f"{i}. [{p['category']}] {p['title']} ⭐")
+    print(f"총 {len(favorites)}개의 즐겨찾기")
+
+
 def show_menu():
     print("\n=== 나만의 프롬프트 관리 ===")
     print("1. 프롬프트 추가")
@@ -201,8 +234,10 @@ def main():
             search_prompt()
         elif choice == "5":
             show_detail()
-        elif choice in ("6", "7"):
-            print("아직 구현되지 않은 기능입니다.")
+        elif choice == "6":
+            toggle_favorite()
+        elif choice == "7":
+            show_favorites()
         else:
             print("잘못된 입력입니다. 0~7 사이의 번호를 입력해주세요.")
 
