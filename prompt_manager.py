@@ -51,6 +51,7 @@ prompts = [
     },
 ]
 
+
 def input_required(message):
     while True:
         value = input(message).strip()
@@ -88,6 +89,7 @@ def add_prompt():
     })
     print("프롬프트가 추가되었습니다!")
 
+
 def show_list():
     print("\n=== 프롬프트 목록 ===")
     if not prompts:
@@ -98,6 +100,7 @@ def show_list():
         star = " ⭐" if p["favorite"] else ""
         print(f"{i}. [{p['category']}] {p['title']}{star}")
     print(f"총 {len(prompts)}개의 프롬프트")
+
 
 def show_by_category():
     print("\n=== 카테고리별 조회 ===")
@@ -121,6 +124,27 @@ def show_by_category():
         star = " ⭐" if p["favorite"] else ""
         print(f"{i}. {p['title']}{star}")
     print(f"총 {len(found)}개의 프롬프트")
+
+
+def search_prompt():
+    print("\n=== 프롬프트 검색 ===")
+    keyword = input_required("검색어: ").lower()
+
+    found = [
+        p for p in prompts
+        if keyword in p["title"].lower() or keyword in p["content"].lower()
+    ]
+
+    if not found:
+        print("검색 결과가 없습니다.")
+        return
+
+    print("검색 결과:")
+    for i, p in enumerate(found, start=1):
+        star = " ⭐" if p["favorite"] else ""
+        print(f"{i}. [{p['category']}] {p['title']}{star}")
+    print(f"{len(found)}개의 프롬프트를 찾았습니다.")
+
 
 def show_menu():
     print("\n=== 나만의 프롬프트 관리 ===")
@@ -148,7 +172,9 @@ def main():
             show_list()
         elif choice == "3":
             show_by_category()
-        elif choice in ("4", "5", "6", "7"):
+        elif choice == "4":
+            search_prompt()
+        elif choice in ("5", "6", "7"):
             print("아직 구현되지 않은 기능입니다.")
         else:
             print("잘못된 입력입니다. 0~7 사이의 번호를 입력해주세요.")
